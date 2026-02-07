@@ -2,6 +2,10 @@ import os
 import numpy as np
 import pytest
 import cv2
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 from unittest.mock import patch, MagicMock
 from slow_shutter import (
     apply_slow_shutter,
