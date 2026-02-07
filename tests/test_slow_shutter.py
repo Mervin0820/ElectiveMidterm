@@ -16,6 +16,7 @@ from slow_shutter import (
 
 def test_apply_slow_shutter_output_shape():
     img = np.ones((100, 200, 3), dtype=np.uint8) * 255
+    img[50, 50] = [0, 0, 0]
     result = apply_slow_shutter(img, trail_length=10, step=2, direction=1, blend_original=0.5)
     assert result.shape == img.shape
     assert result.dtype == np.uint8
