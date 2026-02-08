@@ -14,7 +14,7 @@ from beautify import smooth_skin, load_images, save_image, show_resized
 
 def test_smooth_skin_output_shape():
     img = np.ones((100, 200, 3), dtype=np.uint8) * 255
-    img[50, 50] = [0, 0, 0] 
+    img[50, 50] = [95, 150, 110]  
     result = smooth_skin(img)
     assert isinstance(result, np.ndarray)
     assert result.shape == img.shape
