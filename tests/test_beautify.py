@@ -2,6 +2,9 @@ import os
 import numpy as np
 import pytest
 import cv2
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
 from beautify import smooth_skin, load_images, save_image, show_resized
 
 @pytest.fixture
