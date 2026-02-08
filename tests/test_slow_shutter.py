@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from unittest.mock import patch
 from pathlib import Path
+import sys
 sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
 from slow_shutter import apply_slow_shutter, load_images, save_image, show_resized
 
