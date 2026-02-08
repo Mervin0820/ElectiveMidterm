@@ -12,7 +12,7 @@ sys.path.append(
     )
 )
 
-from src import cartoonify
+import cartoonify
 
 
 # -------------------------------------------------
