@@ -13,12 +13,20 @@ from beautify import smooth_skin, load_images, save_image, show_resized
 
 
 def test_smooth_skin_output_shape():
-    img = np.ones((100, 200, 3), dtype=np.uint8) * 255
-    img[50, 50] = [95, 150, 110]  
+    skin_bgr = cv2.cvtColor(
+        np.uint8([[[128, 150, 100]]]),  
+        cv2.COLOR_YCrCb2BGR
+    )[0, 0]
+
+    img = np.ones((100, 200, 3), dtype=np.uint8)
+    img[:, :] = skin_bgr
+
     result = smooth_skin(img)
+
     assert isinstance(result, np.ndarray)
     assert result.shape == img.shape
     assert result.dtype == np.uint8
+
     assert not np.array_equal(result, img)
 
 def test_smooth_skin_none_input():
