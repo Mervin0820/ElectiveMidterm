@@ -1,55 +1,48 @@
 import os
-import sys
 import cv2
+import numpy as np
 import pytest
-
-# -------------------------------------------------
-# Make src folder importable
-# -------------------------------------------------
-sys.path.append(
-    os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../src")
-    )
-)
-
-import cartoonify
+from caroonify import cartoonify, load_images, save_image  
 
 
-# -------------------------------------------------
-# CONSTANT PATHS
-# -------------------------------------------------
-INPUT_DIR = "input"
-OUTPUT_DIR = "output"
-IMAGE_NAME = "cartoonify.jpg"
+@pytest.fixture
+def sample_image(tmp_path):
+    """Create a dummy image for testing."""
+    img = np.zeros((100, 100, 3), dtype=np.uint8)
+    file_path = tmp_path / "test.jpg"
+    cv2.imwrite(str(file_path), img)
+    return str(file_path), img
+
+@pytest.fixture
+def output_dir(tmp_path):
+    return tmp_path / "output"
 
 
-# -------------------------------------------------
-# INTEGRATION TEST USING REAL IMAGE
-# -------------------------------------------------
+def test_cartoonify_returns_image(sample_image):
+    _, img = sample_image
+    result = cartoonify(img)
+    assert isinstance(result, np.ndarray)
+    assert result.shape == img.shape
+    assert np.any(result != 0)
 
-def test_cartoonify_real_image_pipeline():
-    image_path = os.path.join(INPUT_DIR, IMAGE_NAME)
+def test_cartoonify_none_input():
+    with pytest.raises(ValueError):
+        cartoonify(None)
 
-    # Check image exists in repo
-    assert os.path.exists(image_path), "cartoonify.jpg not found in input folder"
+def test_load_images_yields_image(sample_image, tmp_path):
+    file_path, img = sample_image
+    filenames = [os.path.basename(file_path)]
+    input_dir = tmp_path
+    results = list(load_images(input_dir, filenames))
+    assert len(results) == 1
+    name, loaded_img = results[0]
+    assert name == filenames[0]
+    assert np.array_equal(loaded_img, img)
 
-    # Load image
-    img = cv2.imread(image_path)
-    assert img is not None, "Failed to load cartoonify.jpg"
-
-    # Apply cartoonify
-    cartoon = cartoonify.cartoonify(img)
-
-    assert cartoon is not None
-    assert cartoon.shape == img.shape
-
-    # Save output to output folder
-    saved_path = cartoonify.save_image(
-        OUTPUT_DIR,
-        IMAGE_NAME,
-        cartoon
-    )
-
-    # Verify output
-    assert os.path.exists(saved_path)
-    assert saved_path.startswith(OUTPUT_DIR)
+def test_save_image_creates_file(sample_image, output_dir):
+    _, img = sample_image
+    filename = "saved_test.jpg"
+    path = save_image(output_dir, filename, img)
+    assert os.path.exists(path)
+    saved_img = cv2.imread(path)
+    assert np.array_equal(saved_img, img)
