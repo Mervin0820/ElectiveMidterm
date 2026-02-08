@@ -10,8 +10,9 @@ from cartoonify import cartoonify, load_images, save_image
 
 @pytest.fixture
 def sample_image(tmp_path):
-    """Create a dummy image for testing."""
+    """Create a dummy image with content for testing."""
     img = np.zeros((100, 100, 3), dtype=np.uint8)
+    cv2.rectangle(img, (25, 25), (75, 75), (255, 255, 255), -1)  # white square
     file_path = tmp_path / "test.jpg"
     cv2.imwrite(str(file_path), img)
     return str(file_path), img
