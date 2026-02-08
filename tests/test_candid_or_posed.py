@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
 
-from your_script import (
+from candid_or_posed import (
     load_images,
     classify_candid_or_posed,
     save_image
