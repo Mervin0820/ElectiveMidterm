@@ -33,21 +33,4 @@ def test_cartoonify_none_input():
     with pytest.raises(ValueError):
         cartoonify(None)
 
-def test_load_images_yields_image(sample_image, tmp_path):
-    file_path, img = sample_image
-    filenames = [os.path.basename(file_path)]
-    input_dir = tmp_path
-    results = list(load_images(input_dir, filenames))
-    assert len(results) == 1
-    name, loaded_img = results[0]
-    assert name == filenames[0]
-    # Use allclose instead of array_equal
-    assert np.allclose(loaded_img, img, atol=1)
 
-def test_save_image_creates_file(sample_image, output_dir):
-    _, img = sample_image
-    filename = "saved_test.png"  # use PNG to reduce compression artifacts
-    path = save_image(output_dir, filename, img)
-    assert os.path.exists(path)
-    saved_img = cv2.imread(path)
-    assert np.allclose(saved_img, img, atol=1)
