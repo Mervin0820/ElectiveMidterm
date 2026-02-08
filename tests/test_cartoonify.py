@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 import pytest
-from caroonify import cartoonify, load_images, save_image  
+from cartoonify import cartoonify, load_images, save_image  
 
 
 @pytest.fixture
